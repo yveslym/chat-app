@@ -103,6 +103,7 @@ extension MessageViewController: AVAudioRecorderDelegate, AVAudioPlayerDelegate{
             DispatchQueue.main.async {
                 self.messageUI.append(MessageUI.init(message: message))
                 self.insertNewMessage(MessageUI.init(message: message))
+
                 self.save(message)
             }
         }

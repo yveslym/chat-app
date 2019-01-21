@@ -70,33 +70,7 @@ extension MessageViewController: MessageInputBarDelegate {
         let message = Message.init(id: UUID().uuidString, content: text, created: Date().toString(),receiver: receiverNumber, sender: sender, type: "text", isRead: false, imageURL: nil, audioURL: nil)
 
 
-        if room != nil {
-            DispatchQueue.global().async {
-                MessageService.create(roomId: self.room.id, message: message)
-            }
-        }
-
-        else{
-
-            DispatchQueue.global().async {
-
-                UserService.show(type: .singleUser(phoneNumber: self.receiverNumber)) { (user) in
-                    if let receiver = user as? User{
-                        let newRoom = Room.init(id: UUID().uuidString, messages: [], member: [User.current!, receiver])
-
-                        RoomService.create(room: newRoom, message: message)
-
-                        RoomService.saveRoom(room: newRoom)
-
-                    }
-                    else{
-                        self.presentAlert(title: "Not Register User", message: "The person you are trying to send message does not exist")
-                        return
-                    }
-                }
-            }
-        }
-
+        
         let newMessageUI = MessageUI.init(message: message)
         messageUI.append(newMessageUI)
 

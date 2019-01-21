@@ -97,7 +97,7 @@ class MessageViewController: MessagesViewController {
         messagesCollectionView.messagesLayoutDelegate = self
         messageInputBar.delegate = self
         messagesCollectionView.messagesDisplayDelegate = self
-//        messageInputBar.inputTextView.delegate = self
+
 
         searchTextField.delegate = self
     }
@@ -105,7 +105,7 @@ class MessageViewController: MessagesViewController {
     fileprivate func setupCameraAndAudioBarButtonItem(){
         // create and add photo button
 
-        // 1
+
         let cameraItem = InputBarButtonItem(type: .system)
         let audioItem = InputBarButtonItem(type: .system)
 
@@ -113,7 +113,7 @@ class MessageViewController: MessagesViewController {
         cameraItem.tintColor = .primary
         cameraItem.image = UIImage.init(named: "noun_camera_34534")
         audioItem.image = UIImage.init(named: "microphone")
-        // 2
+
         cameraItem.addTarget(
             self,
             action: #selector(cameraButtonPressed),
@@ -131,7 +131,7 @@ class MessageViewController: MessagesViewController {
         messageInputBar.leftStackView.alignment = .center
         messageInputBar.setLeftStackViewWidthConstant(to: 50, animated: false)
 
-        // 3
+
         messageInputBar.setStackViewItems([cameraItem], forStack: .left, animated: false)
         messageInputBar.setStackViewItems([audioItem], forStack: .bottom, animated: false)
     }
@@ -183,8 +183,6 @@ class MessageViewController: MessagesViewController {
         if messageUI.filter({ $0.messageId == message.messageId}).first != nil{
             return
         }
-
-
             messageUI.append(message)
 
 
@@ -207,7 +205,33 @@ class MessageViewController: MessagesViewController {
     /// Method to save message to firebase
     func save(_ message: Message) {
 
-        MessageService.create(roomId: room.id, message: message)
+        if room != nil {
+            DispatchQueue.global().async {
+                MessageService.create(roomId: self.room.id, message: message)
+            }
+        }
+
+        else{
+
+            DispatchQueue.global().async {
+
+                UserService.show(type: .singleUser(phoneNumber: self.receiverNumber)) { (user) in
+                    if let receiver = user as? User{
+                        let newRoom = Room.init(id: UUID().uuidString, messages: [], member: [User.current!, receiver])
+
+                        RoomService.create(room: newRoom, message: message)
+
+                        RoomService.saveRoom(room: newRoom)
+
+                    }
+                    else{
+                        self.presentAlert(title: "Not Register User", message: "The person you are trying to send message does not exist")
+                        return
+                    }
+                }
+            }
+        }
+
 
     }
 
