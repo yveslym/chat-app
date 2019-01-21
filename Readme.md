@@ -26,4 +26,16 @@ During this challenge, I faced a couple of challenges:
 
 Saving the picture in cache memory to retrieve it faster would have been an appropriate optimization.
 
-The UI is pretty basic, but I mostly focused on functionality.
+The UI is pretty basic,without much animation, but I mostly focused on functionality.
+
+Handle edge cases such as, if the user try to send a message to someone who odesn't have an account. (for now just an alert show will show up)
+
+### ScreenShot
+
+
+
+| ![](https://i.imgur.com/CjVmFU5.jpg) | ![](https://i.imgur.com/9VeyGks.png)  | ![](https://i.imgur.com/GUKekI4.jpg) |
+| -------- | -------- | -------- |
+|![](https://i.imgur.com/FTz1IzQ.png)      | ![](https://i.imgur.com/eMLE2Hb.jpg)   |  ![](https://i.imgur.com/XVUlImH.jpg)
+|
+
